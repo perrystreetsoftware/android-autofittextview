@@ -1,5 +1,6 @@
 package me.grantland.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -427,20 +428,22 @@ public class AutofitHelper {
     /**
      * Set the enabled state of automatically resizing text.
      */
-    public AutofitHelper setEnabled(boolean enabled) {
+    @SuppressLint("NewApi") public AutofitHelper setEnabled(boolean enabled) {
         if (mEnabled != enabled) {
             mEnabled = enabled;
 
-            if (enabled) {
-                mTextView.addTextChangedListener(mTextWatcher);
-                mTextView.addOnLayoutChangeListener(mOnLayoutChangeListener);
-
-                autofit();
-            } else {
-                mTextView.removeTextChangedListener(mTextWatcher);
-                mTextView.removeOnLayoutChangeListener(mOnLayoutChangeListener);
-
-                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+	            if (enabled) {
+	                mTextView.addTextChangedListener(mTextWatcher);
+	                mTextView.addOnLayoutChangeListener(mOnLayoutChangeListener);
+	
+	                autofit();
+	            } else {
+	                mTextView.removeTextChangedListener(mTextWatcher);
+	                mTextView.removeOnLayoutChangeListener(mOnLayoutChangeListener);
+	
+	                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+	            }
             }
         }
         return this;
@@ -532,7 +535,7 @@ public class AutofitHelper {
         }
     }
 
-    private class AutofitOnLayoutChangeListener implements View.OnLayoutChangeListener {
+    @SuppressLint("NewApi") private class AutofitOnLayoutChangeListener implements View.OnLayoutChangeListener {
         @Override
         public void onLayoutChange(View view, int left, int top, int right, int bottom,
                 int oldLeft, int oldTop, int oldRight, int oldBottom) {
