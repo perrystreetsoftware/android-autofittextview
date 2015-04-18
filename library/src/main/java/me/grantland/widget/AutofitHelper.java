@@ -240,13 +240,17 @@ public class AutofitHelper {
 
     private TextWatcher mTextWatcher = new AutofitTextWatcher();
 
-    private View.OnLayoutChangeListener mOnLayoutChangeListener =
-            new AutofitOnLayoutChangeListener();
+    private View.OnLayoutChangeListener mOnLayoutChangeListener;
 
     private AutofitHelper(TextView view) {
         final Context context = view.getContext();
         float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        	this.mOnLayoutChangeListener = new AutofitOnLayoutChangeListener();
+        }
+        
         mTextView = view;
         mPaint = new TextPaint();
         setRawTextSize(view.getTextSize());
